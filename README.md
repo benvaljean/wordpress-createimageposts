@@ -6,6 +6,8 @@ Specifiy a `MediaRoot` in `createposts.cfg` and for each directory in the text f
 
 This first public release makes many other assumptions that are hard-coded, such as the html string used and thumbnail suffix used. The script also assumes that the thumbnails already exist - it does not create them. All these features will be added in future releases.
 
+Requires python < 3.0
+
 ## Usage
 
 	python createposts.py --site=[all|site-name] --title=[all|dir-name] --date=[all|inc] [--version]
