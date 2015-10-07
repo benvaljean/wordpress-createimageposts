@@ -46,7 +46,7 @@ def updatesite(site):
 		by_hour = dict((k,list(v)) for k,v in itertools.groupby(dir_files, key=mtime_hour)) #python 2.6
 		logger.info(by_hour)
 		for f in by_hour:
-			logger.warning(f)
+			logger.debug(f)
 			post = WordPressPost()
 			post.title = title
 			post.terms_names = {
