@@ -10,8 +10,20 @@ from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import GetPosts, NewPost
 
 import logging
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+fh = logging.FileHandler('createposts.log')
+fh.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+formatter_console = logging.Formatter('%(message)s')
+formatter_logfile = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+fh.setFormatter(formatter_logfile)
+ch.setFormatter(formatter_console)
+
+logger.addHandler(fh)
+logger.addHandler(ch)
 
 version = "1.9.12"
 
