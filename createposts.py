@@ -25,7 +25,7 @@ ch.setFormatter(formatter_console)
 logger.addHandler(fh)
 logger.addHandler(ch)
 
-version = "1.9.12"
+version = "1.10.0"
 
 def showhelp():
 	print sys.argv[0] + " v" + version
