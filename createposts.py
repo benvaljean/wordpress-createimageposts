@@ -84,6 +84,19 @@ def updatesite(site):
 	#			   if '150x150' not in pic:
 						urlroot = config.get(site, 'MediaRootURL') 
 						fileName, fileExtension = os.path.splitext(pic)
+						#Create thumbnail if it does not already exist
+						#Animated gifs still need handling
+						picThumb = fileName + '-150x150' + fileExtension
+						if not os.path.isfile(picThumb):
+							logger.debug("Thumbnail " + picThumb + " does not exist, creating thumbnail")
+							size = 250, 250
+							try:
+								im = Image.open(dir + '/' + pic)
+								im.thumbnail(size)
+								im.save(dir + '/' + picThumb, "JPEG")
+							except IOError:
+								logger.error("Cannot create thumbnail" + picThumb)
+						#Get dimensions of image if available
 						try:
 							im = Image.open(dir + '/' + pic)
 							(width, height) = im.size
