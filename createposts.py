@@ -25,7 +25,7 @@ ch.setFormatter(formatter_console)
 logger.addHandler(fh)
 logger.addHandler(ch)
 
-version = "1.10.0"
+version = "1.11.0"
 
 def showhelp():
 	print sys.argv[0] + " v" + version
@@ -84,18 +84,18 @@ def updatesite(site):
 	#			   if '150x150' not in pic:
 						urlroot = config.get(site, 'MediaRootURL') 
 						fileName, fileExtension = os.path.splitext(pic)
-						#Create thumbnail if it does not already exist
-						#Animated gifs still need handling
-						picThumb = fileName + '-150x150' + fileExtension
-						if not os.path.isfile(picThumb):
-							logger.debug("Thumbnail " + picThumb + " does not exist, creating thumbnail")
-							size = 250, 250
-							try:
-								im = Image.open(dir + '/' + pic)
-								im.thumbnail(size)
-								im.save(dir + '/' + picThumb, "JPEG")
-							except IOError:
-								logger.error("Cannot create thumbnail" + picThumb)
+						#Create thumbnail if enabled and does not already exist
+						if config.get('createposts', 'Thumbnails') == 'yes': 
+							picThumb = fileName + '-150x150' + fileExtension
+							if not os.path.isfile(dir + '/' + picThumb):
+								logger.info("Thumbnail " + picThumb + " does not exist, creating thumbnail")
+								size = 150, 150
+								try:
+									im = Image.open(dir + '/' + pic)
+									im.thumbnail(size)
+									im.save(dir + '/' + picThumb)
+								except IOError:
+									logger.error("Cannot create thumbnail " + picThumb)
 						#Get dimensions of image if available
 						try:
 							im = Image.open(dir + '/' + pic)
@@ -104,7 +104,12 @@ def updatesite(site):
 							width = ''
 							height =''
 							pass
-						entry='<a href="' + urlroot + titlelistdir[title] + '/' + pic + '"><img class="alignnone size-medium tooltips" title="' + str(width) + ' x ' + str(height) + '" src="' + urlroot + titlelistdir[title] + '/' + fileName + '-150x150' + fileExtension + '"></a>'
+						imglink = urlroot + titlelistdir[title] + '/' + pic
+						if config.get('createposts', 'UsePhoton') == 'yes':
+							thumblink = imglink
+						else:
+							thumblink = urlroot + titlelistdir[title] + '/' + fileName + '-150x150' + fileExtension
+						entry='<a href="' + imglink + '"><img class="alignnone size-medium tooltips" title="' + str(width) + ' x ' + str(height) + '" src="' + thumblink + '"></a>'
 						logger.debug(entry)
 						post.content += entry
 	

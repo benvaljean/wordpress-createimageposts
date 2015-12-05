@@ -28,6 +28,19 @@ Upload all pictures found regardless of file modified timestamp or upload increm
 
 ## Configuration file usage
 
+Configure each site under its own `[section]` , general options are in `[createposts]`
+
+###General options
+####Thumbnails
+
+Create thumbnails with the (currently) hard-coded suffix and size of `-150x150`. Aspect ratio is maintained.
+
+####UsePhoton
+
+Sets the thumbnail image link to the image itself, allowing Wordpress to rewrite links to `image.jpg?fit=width%2Cheight` based on your media settings in Settings > Media. Photon must be enabled on your site for this to work correctly.
+
+###Site options
+
 ####TitleList
 
 One directory-per-line list of directories to iterate through within the `MediaRoot` location when searching for images to post, each post will use the directory name as the post title.
@@ -52,3 +65,4 @@ Media root location to iterate through when searching for images to post, eg. /v
 ###MediaRootURL
 
 Media root URL to prefix onto image locations in posts. This url should reference the location in `MediaRoot`, eg. http://www.example.com/pics/
+
