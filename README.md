@@ -1,12 +1,12 @@
 # wordpress-createimageposts
 
-Automatically create image posts in Wordpress from a directory tree of images
+Automatically create image and video posts in Wordpress from a directory tree of images and videos.
 
-Specifiy a `MediaRoot` in `createposts.cfg` and for each directory in the text file referenced in `TitlesList` wordpress posts are created, collated by the hour for all pictures found. The post date is taken from the file modified date, the post title from the directory title and the tags and categories from `_tags.txt` and `_cats.txt` files within each directory.
+Specifiy a `MediaRoot` in `createposts.cfg` and for each directory in the text file referenced in `TitlesList` wordpress posts are created, collated by the hour for all pictures and videos found. The post date is taken from the file modified date, the post title from the directory title and the tags and categories from `_tags.txt` and `_cats.txt` files within each directory.
 
-The `TitlesList` file should have directory names once-per-line and wordpress credentials placed in the cfg file. Pictures should already be in a location serviced by `MediaRootURL`/dir-name . Image dimensions are placed in a title element of the http link.
+The `TitlesList` file should have directory names once-per-line and wordpress credentials placed in the cfg file. Pictures and videos should already be in a location serviced by `MediaRootURL`/dir-name . Image dimensions are placed in a title element of the http link. Videos are inserted into posts using the `[video]` short-code.
 
-Some assumptions are currently hard-coded, such as the html string used and thumbnail size/suffix used.
+Some assumptions are currently hard-coded, such as the html string used and thumbnail size/suffix.
 
 Requires python 2.x
 

@@ -25,7 +25,7 @@ ch.setFormatter(formatter_console)
 logger.addHandler(fh)
 logger.addHandler(ch)
 
-version = "1.11.0"
+version = "1.12.0"
 
 def showhelp():
 	print sys.argv[0] + " v" + version
@@ -51,7 +51,7 @@ def updatesite(site):
 		#tuple 4=by the hour  3=by the day
 		mtime_hour = lambda f: datetime.datetime(*mtime(f).timetuple()[:4])
 		dir_files = sorted(os.listdir(dir), key=mtime)
-		dir_files = filter(lambda f: '150x150' not in f and '_p.jpg' not in f and f.lower().endswith(('.jpg','.jpeg','.png','.gif')) , dir_files)
+		dir_files = filter(lambda f: '150x150' not in f and '_p.jpg' not in f and f.lower().endswith(('.jpg','.jpeg','.png','.gif','.webm','.mp4')) , dir_files)
 		if doallpics == 0:
 			dir_files = filter(lambda f: datetime.datetime.strptime(lastrun,'%Y-%m-%d %H:%M:%S') < mtime(f), dir_files)
 		#dir_files = filter(lambda f: datetime.datetime(2010,1,1,0) <	mtime(f) < datetime.datetime(2015,1,1,0), dir_files)
@@ -80,10 +80,10 @@ def updatesite(site):
 			logger.debug(post.terms_names)
 			post.content = ''
 			for pic in by_hour[f]:
-	#		   if pic.lower().endswith(('.jpg','.jpeg','.png','.gif')):
+				urlroot = config.get(site, 'MediaRootURL') 
+				fileName, fileExtension = os.path.splitext(pic)
+				if pic.lower().endswith(('.jpg','.jpeg','.png','.gif')):
 	#			   if '150x150' not in pic:
-						urlroot = config.get(site, 'MediaRootURL') 
-						fileName, fileExtension = os.path.splitext(pic)
 						#Create thumbnail if enabled and does not already exist
 						if config.get('createposts', 'Thumbnails') == 'yes': 
 							picThumb = fileName + '-150x150' + fileExtension
@@ -111,7 +111,12 @@ def updatesite(site):
 							thumblink = urlroot + titlelistdir[title] + '/' + fileName + '-150x150' + fileExtension
 						entry='<a href="' + imglink + '"><img class="alignnone size-medium tooltips" title="' + str(width) + ' x ' + str(height) + '" src="' + thumblink + '"></a>'
 						logger.debug(entry)
-						post.content += entry
+				else:
+				#Video
+					print 'video ' + fileExtension[1:] + '="' + urlroot + titlelistdir[title] + '/' + pic
+					entry='[video ' + fileExtension[1:] + '="' + urlroot + titlelistdir[title] + '/' + pic + '"][/video]'
+
+				post.content += entry
 	
 			post.content = post.content.strip()
 			logger.debug(post.content)
