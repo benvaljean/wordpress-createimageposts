@@ -1,6 +1,7 @@
 #wordpress-createimageposts
+#https://github.com/benvaljean/wordpress-createimageposts.git
 
-#(c) Benjamin Goodacre 2015
+#(c) Benjamin Goodacre 2017
 
 import ConfigParser
 import os, itertools, datetime, time, sys, getopt
@@ -25,7 +26,7 @@ ch.setFormatter(formatter_console)
 logger.addHandler(fh)
 logger.addHandler(ch)
 
-version = "1.12.0"
+version = "1.13.0"
 
 def showhelp():
 	print sys.argv[0] + " v" + version
@@ -46,11 +47,15 @@ def updatesite(site):
 			titlelistdir[line.strip()] = line.lower().replace(' ','-').strip()
 	for title in titlelistdir:
 		dir = config.get(site, 'MediaRoot') + titlelistdir[title]
-		mtime = lambda f : datetime.datetime.fromtimestamp(os.path.getmtime(dir + '/' + f))
+		mtime = lambda f : datetime.datetime.fromtimestamp(os.path.getmtime(f))
 		logger.info(title + ' ' + dir)
 		#tuple 4=by the hour  3=by the day
 		mtime_hour = lambda f: datetime.datetime(*mtime(f).timetuple()[:4])
-		dir_files = sorted(os.listdir(dir), key=mtime)
+                dir_files = []
+                for root, subFolder, files in os.walk(dir):
+                    for item in files:
+                        dir_files.append (root + '/' + item)
+		dir_files = sorted(dir_files, key=mtime)
 		dir_files = filter(lambda f: '150x150' not in f and '_p.jpg' not in f and f.lower().endswith(('.jpg','.jpeg','.png','.gif','.webm','.mp4')) , dir_files)
 		if doallpics == 0:
 			dir_files = filter(lambda f: datetime.datetime.strptime(lastrun,'%Y-%m-%d %H:%M:%S') < mtime(f), dir_files)
@@ -98,13 +103,13 @@ def updatesite(site):
 									logger.error("Cannot create thumbnail " + picThumb)
 						#Get dimensions of image if available
 						try:
-							im = Image.open(dir + '/' + pic)
+							im = Image.open(pic)
 							(width, height) = im.size
 						except:
 							width = ''
 							height =''
 							pass
-						imglink = urlroot + titlelistdir[title] + '/' + pic
+						imglink = urlroot + titlelistdir[title] + '/' + os.path.relpath(pic, dir)
 						if config.get('createposts', 'UsePhoton') == 'yes':
 							thumblink = imglink
 						else:
