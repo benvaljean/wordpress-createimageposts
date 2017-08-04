@@ -89,7 +89,7 @@ def updatesite(site):
 							picThumb = fileName + '-150x150' + fileExtension
 							if not os.path.isfile(dir + '/' + picThumb):
 								logger.info("Thumbnail " + picThumb + " does not exist, creating thumbnail")
-								size = 150, 150
+								size = 225, 225
 								try:
 									im = Image.open(dir + '/' + pic)
 									im.thumbnail(size)
